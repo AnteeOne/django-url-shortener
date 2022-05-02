@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from django.db.models import CASCADE
 
 from url_shortener.utils import create_shortened_url
 
@@ -8,6 +10,7 @@ class Url(models.Model):
     redirect_count = models.PositiveIntegerField(default=0)
     long_url = models.URLField()
     short_url = models.CharField(max_length=15, unique=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.short_url:

@@ -125,3 +125,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MAXIMUM_URL_CHARS = 10
+
+LOGIN_URL = "/signin"
