@@ -37,9 +37,11 @@
                         <td><a href="{{ url.long_url }}">{{ url.long_url }}</a></td>
                         <td>{{ url.redirect_count }}</td>
                         <td>
-                            <button class="btn btn-danger" style="margin-left: 5px;" type="submit"><i class="fa fa-trash"
-                                                                                                      style="font-size: 15px;"></i>
-                            </button>
+                            <form action="" class="text-center" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="url_id" value="{{ url.id }}">
+                                <button class="btn btn-danger" style="margin-left: 5px;" type="submit"><i class="fa fa-trash" style="font-size: 15px;"></i></button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>

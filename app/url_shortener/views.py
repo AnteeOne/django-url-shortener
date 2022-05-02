@@ -23,10 +23,10 @@ def home_view(request):
 
     elif request.method == 'POST':
 
-        used_form = ShortenerForm(request.POST)
+        form = ShortenerForm(request.POST)
 
-        if used_form.is_valid():
-            shortened_object = used_form.save(commit=False)
+        if form.is_valid():
+            shortened_object = form.save(commit=False)
             shortened_object.user = current_user
             shortened_object.save()
 
@@ -39,7 +39,7 @@ def home_view(request):
 
             return render(request, template, context)
 
-        context['errors'] = used_form.errors
+        context['errors'] = form.errors
 
         return render(request, template, context)
 
@@ -70,6 +70,8 @@ def sign_up_view(request):
             # Save the User object
             new_user.save()
             return HttpResponseRedirect('/signin')
+        else:
+            return HttpResponse("Invalid data, try again")
     else:
         user_form = UserRegistrationForm()
 
@@ -101,7 +103,13 @@ def sign_out_view(request):
 
 @login_required()
 def urls_view(request):
-    current_user = request.user
-    urls = Url.objects.filter(user_id=current_user.id).order_by('-redirect_count')
-    template = 'url_shortener/urls.html'
-    return render(request, template, {'urls': urls})
+    if request.method == 'POST':
+        url_id = request.POST.get("url_id", "")
+        Url.objects.filter(id=url_id).delete()
+        return redirect("/urls")
+
+    elif request.method == 'GET':
+        current_user = request.user
+        urls = Url.objects.filter(user_id=current_user.id).order_by('-redirect_count')
+        template = 'url_shortener/urls.html'
+        return render(request, template, {'urls': urls})
