@@ -10,12 +10,11 @@ class Url(models.Model):
     redirect_count = models.PositiveIntegerField(default=0)
     long_url = models.URLField()
     short_url = models.CharField(max_length=15, unique=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.short_url:
             self.short_url = create_shortened_url(self)
-
         super().save(*args, **kwargs)
 
     class Meta:
